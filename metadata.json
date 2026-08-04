@@ -1,0 +1,6 @@
+{
+  "name": "VMware SD-WAN 640 3D Studio",
+  "description": "Interactive 3D model, custom shader materials, predator cloak mode, port inspector, and diagnostic studio for the VMware SD-WAN Edge 640 device.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
