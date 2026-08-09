@@ -1,12 +1,19 @@
 import React from 'react';
 import { PortInfo, InternalComponent } from '../types';
-import { X, Network, Zap, ShieldCheck, Activity, Cpu, HardDrive } from 'lucide-react';
+import { X, Network, Activity, Cpu } from 'lucide-react';
 
 interface PortInspectorModalProps {
   selectedPort: PortInfo | null;
   selectedComponent: InternalComponent | null;
   onClose: () => void;
 }
+
+const PACKET_STREAM_BARS = [
+  40, 65, 80, 50, 90, 75, 85, 95, 60, 70, 88, 100, 78, 82, 92, 60
+].map((height, idx) => ({
+  id: `pkt-bar-${idx + 1}`,
+  style: { height: `${height}%` }
+}));
 
 export const PortInspectorModal: React.FC<PortInspectorModalProps> = ({
   selectedPort,
@@ -21,6 +28,7 @@ export const PortInspectorModal: React.FC<PortInspectorModalProps> = ({
         {/* Modal Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close inspector"
           className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors border border-white/10"
         >
           <X className="w-4 h-4" />
@@ -72,11 +80,11 @@ export const PortInspectorModal: React.FC<PortInspectorModalProps> = ({
 
               {/* Simulated Sine Wave Bar Graph */}
               <div className="h-10 flex items-end justify-between gap-1 pt-2">
-                {[40, 65, 80, 50, 90, 75, 85, 95, 60, 70, 88, 100, 78, 82, 92, 60].map((h, i) => (
+                {PACKET_STREAM_BARS.map(bar => (
                   <div
-                    key={i}
-                    className="w-full bg-blue-500/80 rounded-t-sm transition-all duration-300"
-                    style={{ height: `${h}%` }}
+                    key={bar.id}
+                    className="w-full bg-blue-500/80 rounded-t-sm transition-[height] duration-300"
+                    style={bar.style}
                   />
                 ))}
               </div>

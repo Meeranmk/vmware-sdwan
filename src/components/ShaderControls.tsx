@@ -35,6 +35,7 @@ export const ShaderControls: React.FC<ShaderControlsProps> = ({
         </span>
         <button
           onClick={() => updateSetting('autoRotate', !settings.autoRotate)}
+          aria-label={settings.autoRotate ? 'Disable auto turntable rotation' : 'Enable auto turntable rotation'}
           className={`w-9 h-5 flex items-center rounded-full p-1 transition-colors duration-200 ${
             settings.autoRotate ? 'bg-blue-500 justify-end' : 'bg-slate-800 justify-start'
           }`}
@@ -59,6 +60,7 @@ export const ShaderControls: React.FC<ShaderControlsProps> = ({
             step="0.02"
             value={settings.ior}
             onChange={e => updateSetting('ior', parseFloat(e.target.value))}
+            aria-label="Stealth distortion IOR"
             className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400"
           />
 
@@ -75,6 +77,7 @@ export const ShaderControls: React.FC<ShaderControlsProps> = ({
             step="0.1"
             value={settings.stealthRippleSpeed}
             onChange={e => updateSetting('stealthRippleSpeed', parseFloat(e.target.value))}
+            aria-label="Ripple speed"
             className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400"
           />
 
@@ -89,6 +92,7 @@ export const ShaderControls: React.FC<ShaderControlsProps> = ({
             step="1"
             value={settings.stealthFrequency}
             onChange={e => updateSetting('stealthFrequency', parseFloat(e.target.value))}
+            aria-label="Hex lattice frequency"
             className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400"
           />
         </div>

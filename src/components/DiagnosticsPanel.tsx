@@ -1,6 +1,6 @@
 import React from 'react';
 import { NetworkState } from '../types';
-import { Activity, Wifi, ShieldAlert, Radio, Zap, ArrowRightLeft, Server } from 'lucide-react';
+import { Activity, Radio, ArrowRightLeft } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
 
 interface DiagnosticsPanelProps {

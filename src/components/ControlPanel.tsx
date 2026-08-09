@@ -2,6 +2,39 @@ import React from 'react';
 import { CameraPreset, MaterialMode } from '../types';
 import { Camera, Eye, Layers, Sparkles, Box, Shield, Zap, Activity } from 'lucide-react';
 
+interface CameraPresetOption {
+  id: CameraPreset;
+  label: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}
+
+const CAMERA_PRESETS: CameraPresetOption[] = [
+  { id: 'overview', label: '3D Overview', Icon: Camera },
+  { id: 'front', label: 'Front Panel', Icon: Eye },
+  { id: 'rear', label: 'Rear Ports', Icon: Box },
+  { id: 'top', label: 'Top View', Icon: Layers },
+  { id: 'ports', label: 'Port Zoom', Icon: Zap },
+  { id: 'exploded', label: 'Exploded', Icon: Activity }
+];
+
+interface MaterialModeOption {
+  id: MaterialMode;
+  label: string;
+  desc: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  iconColorClass: string;
+  colorClass: string;
+}
+
+const MATERIAL_MODES: MaterialModeOption[] = [
+  { id: 'default', label: 'Factory White', desc: 'Enterprise Arctic White Finish', Icon: Box, iconColorClass: 'text-slate-100', colorClass: 'hover:border-slate-300' },
+  { id: 'predator', label: 'Predator Cloak', desc: 'Refractive Optical Camouflage Shader', Icon: Sparkles, iconColorClass: 'text-cyan-400', colorClass: 'hover:border-cyan-400 text-cyan-400' },
+  { id: 'xray', label: 'X-Ray Thermal', desc: 'Internal Heat Radiation Map', Icon: Shield, iconColorClass: 'text-rose-400', colorClass: 'hover:border-rose-400 text-rose-400' },
+  { id: 'hologram', label: 'Cyber Matrix', desc: 'Digital Holographic Scanline Grid', Icon: Layers, iconColorClass: 'text-emerald-400', colorClass: 'hover:border-emerald-400 text-emerald-400' },
+  { id: 'carbon', label: 'Stealth Carbon', desc: 'High-Gloss Carbon Fiber Matrix', Icon: Box, iconColorClass: 'text-slate-300', colorClass: 'hover:border-slate-400' },
+  { id: 'gold', label: 'Titanium Gold', desc: 'Specularity & Metallic Polish', Icon: Zap, iconColorClass: 'text-amber-400', colorClass: 'hover:border-amber-400 text-amber-400' }
+];
+
 interface ControlPanelProps {
   cameraPreset: CameraPreset;
   onSelectCameraPreset: (preset: CameraPreset) => void;
@@ -19,24 +52,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   explodeFactor,
   onChangeExplodeFactor
 }) => {
-  const cameraPresets: { id: CameraPreset; label: string; icon: React.ReactNode }[] = [
-    { id: 'overview', label: '3D Overview', icon: <Camera className="w-3.5 h-3.5" /> },
-    { id: 'front', label: 'Front Panel', icon: <Eye className="w-3.5 h-3.5" /> },
-    { id: 'rear', label: 'Rear Ports', icon: <Box className="w-3.5 h-3.5" /> },
-    { id: 'top', label: 'Top View', icon: <Layers className="w-3.5 h-3.5" /> },
-    { id: 'ports', label: 'Port Zoom', icon: <Zap className="w-3.5 h-3.5" /> },
-    { id: 'exploded', label: 'Exploded', icon: <Activity className="w-3.5 h-3.5" /> }
-  ];
-
-  const materialModes: { id: MaterialMode; label: string; desc: string; icon: React.ReactNode; colorClass: string }[] = [
-    { id: 'default', label: 'Factory White', desc: 'Enterprise Arctic White Finish', icon: <Box className="w-4 h-4 text-slate-100" />, colorClass: 'hover:border-slate-300' },
-    { id: 'predator', label: 'Predator Cloak', desc: 'Refractive Optical Camouflage Shader', icon: <Sparkles className="w-4 h-4 text-cyan-400" />, colorClass: 'hover:border-cyan-400 text-cyan-400' },
-    { id: 'xray', label: 'X-Ray Thermal', desc: 'Internal Heat Radiation Map', icon: <Shield className="w-4 h-4 text-rose-400" />, colorClass: 'hover:border-rose-400 text-rose-400' },
-    { id: 'hologram', label: 'Cyber Matrix', desc: 'Digital Holographic Scanline Grid', icon: <Layers className="w-4 h-4 text-emerald-400" />, colorClass: 'hover:border-emerald-400 text-emerald-400' },
-    { id: 'carbon', label: 'Stealth Carbon', desc: 'High-Gloss Carbon Fiber Matrix', icon: <Box className="w-4 h-4 text-slate-300" />, colorClass: 'hover:border-slate-400' },
-    { id: 'gold', label: 'Titanium Gold', desc: 'Specularity & Metallic Polish', icon: <Zap className="w-4 h-4 text-amber-400" />, colorClass: 'hover:border-amber-400 text-amber-400' }
-  ];
-
   return (
     <aside className="absolute bottom-6 left-6 z-30 w-80 md:w-96 p-5 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl text-slate-200 flex flex-col gap-5">
       {/* 1. Camera View Angles */}
@@ -47,20 +62,23 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </span>
         </div>
         <div className="grid grid-cols-3 gap-1.5">
-          {cameraPresets.map(preset => (
-            <button
-              key={preset.id}
-              onClick={() => onSelectCameraPreset(preset.id)}
-              className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-mono font-medium border transition-all duration-200 ${
-                cameraPreset === preset.id
-                  ? 'bg-blue-500/20 text-blue-300 border-blue-500/40 shadow-lg shadow-blue-500/10'
-                  : 'bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 border-white/10'
-              }`}
-            >
-              {preset.icon}
-              <span className="truncate">{preset.label}</span>
-            </button>
-          ))}
+          {CAMERA_PRESETS.map(preset => {
+            const PresetIcon = preset.Icon;
+            return (
+              <button
+                key={preset.id}
+                onClick={() => onSelectCameraPreset(preset.id)}
+                className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-mono font-medium border transition-all duration-200 ${
+                  cameraPreset === preset.id
+                    ? 'bg-blue-500/20 text-blue-300 border-blue-500/40 shadow-lg shadow-blue-500/10'
+                    : 'bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 border-white/10'
+                }`}
+              >
+                <PresetIcon className="w-3.5 h-3.5" />
+                <span className="truncate">{preset.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -81,6 +99,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           step="0.01"
           value={explodeFactor}
           onChange={e => onChangeExplodeFactor(parseFloat(e.target.value))}
+          aria-label="Exploded view assembly factor"
           className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400"
         />
         <div className="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
@@ -98,23 +117,26 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </span>
         </div>
         <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-          {materialModes.map(mode => (
-            <button
-              key={mode.id}
-              onClick={() => onSelectMaterialMode(mode.id)}
-              className={`p-2.5 rounded-xl border text-left transition-all duration-200 ${
-                materialMode === mode.id
-                  ? 'bg-white/10 border-blue-400 text-white shadow-lg shadow-blue-500/10 ring-1 ring-blue-400/50'
-                  : `bg-white/5 text-slate-400 border-white/10 ${mode.colorClass}`
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-0.5">
-                {mode.icon}
-                <span className="text-xs font-mono font-bold text-slate-200">{mode.label}</span>
-              </div>
-              <p className="text-[10px] text-slate-400 leading-snug line-clamp-1">{mode.desc}</p>
-            </button>
-          ))}
+          {MATERIAL_MODES.map(mode => {
+            const ModeIcon = mode.Icon;
+            return (
+              <button
+                key={mode.id}
+                onClick={() => onSelectMaterialMode(mode.id)}
+                className={`p-2.5 rounded-xl border text-left transition-all duration-200 ${
+                  materialMode === mode.id
+                    ? 'bg-white/10 border-blue-400 text-white shadow-lg shadow-blue-500/10 ring-1 ring-blue-400/50'
+                    : `bg-white/5 text-slate-400 border-white/10 ${mode.colorClass}`
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-0.5">
+                  <ModeIcon className={`w-4 h-4 ${mode.iconColorClass}`} />
+                  <span className="text-xs font-mono font-bold text-slate-200">{mode.label}</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-snug line-clamp-1">{mode.desc}</p>
+              </button>
+            );
+          })}
         </div>
       </div>
     </aside>
